@@ -1,0 +1,71 @@
+/* Dashboard Page Styling */
+.dashboard-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  header {
+    text-align: center;
+    background-color: #646cff;
+    color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .notifications {
+    background-color: #ffcc00;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .account-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .account-box {
+    background-color: white;
+    padding: 20px;
+    flex: 1;
+    text-align: center;
+    margin: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .budget-overview {
+    margin-top: 20px;
+  }
+  
+  .budget-item {
+    background-color: white;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+  }
+  
+  .progress-bar {
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+  
+  .progress {
+    height: 100%;
+    border-radius: 5px;
+  }
+  
+  .shopping { width: 60%; background-color: #ff5733; } /* 60% of budget */
+  .entertainment { width: 50%; background-color: #33aaff; } /* 50% of budget */
+  .food { width: 70%; background-color: #33cc33; } /* 70% of budget */
+  
