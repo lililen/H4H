@@ -1,6 +1,8 @@
 import React from "react";
 import "./dashboard.css"; // Import CSS file
 
+
+
 const Dashboard = ({ user }) => {
   return (
     <div className="dashboard-container">
