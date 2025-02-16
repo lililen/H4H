@@ -2,8 +2,11 @@ from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from plaid import Client 
 import os
 import database  # Import database.py
+
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -15,6 +18,10 @@ app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'fallback_secret
 # Initialize Flask extensions
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
+
+#Plaid blueprint
+from plaid_service import plaid_bp
+app.register_blueprint(plaid_bp, url_prefix='/api/plaid')
 
 # Authentication Routes
 @app.route('/api/auth/signup', methods=['POST'])
