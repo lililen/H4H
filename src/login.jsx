@@ -1,33 +1,32 @@
-import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./login.css";
 
-const Login = ({setUser}) =>{
-  const [username, setUsername] = useState("");
+const Login = ({ setUser }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username && password) {
-      setUser(username); 
-      navigate("/dashboard");
+    if (email && password) {
+      setUser(email); // Simulated user authentication
+      navigate("/dashboard"); // Redirect to dashboard
     } else {
-      alert("Please enter a valid username and password.");
+      alert("Please enter a valid email and password.");
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1 className="website-name">Website Name</h1>
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
@@ -37,8 +36,9 @@ const Login = ({setUser}) =>{
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Sign In </button>
+          <button type="submit">Sign In</button>
         </form>
+        <p>Don't have an account? <a href="/signup" className="signup-link">Sign Up</a></p>
       </div>
     </div>
   );
