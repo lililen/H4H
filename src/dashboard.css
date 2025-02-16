@@ -81,6 +81,9 @@ header h1 {
   margin: 4px 0;
   transition: 0.3s;
 }
+.budget-item p {
+  display: inline-block;
+}
 
 .bar.open:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
