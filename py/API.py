@@ -6,22 +6,38 @@ from plaid import Client
 import os
 import database  # Import database.py
 
-
-
-# Initialize Flask app
 app = Flask(__name__)
 CORS(app)
-
-# Set secret key for JWT authentication
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'fallback_secret')
-
-# Initialize Flask extensions
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
-#Plaid blueprint
+# Plaid blueprint
 from plaid_service import plaid_bp
 app.register_blueprint(plaid_bp, url_prefix='/api/plaid')
+
+
+@plaid_bp.route("/create_link_token", methods=["POST"])
+def create_link_token():
+    user_email = get_jwt_identity()
+    try:
+        response = plaid_client.LinkToken.create({
+            "user": {"client_user_id": user_email},
+            "client_name": "Your App Name",
+            "products": ["transactions"],
+            "country_codes": ["US"],
+            "language": "en"
+        })
+        link_token = response.get("link_token")
+        print("Created link token:", link_token)
+        return jsonify({"link_token": link_token}), 200
+    except Exception as e:
+        print("Error in create_link_token:", e)
+        return jsonify({"error": str(e)}), 400
+
+
+
+
 
 # Authentication Routes
 @app.route('/api/auth/signup', methods=['POST'])
@@ -134,6 +150,15 @@ def consume_funds():
         return jsonify({"message": f"Consumed {amount} from savings"}), 200
     return jsonify({"error": "Not enough funds"}), 400
 
-# Run Flask Server
+plaid_client = Client(
+    client_id="your_client_id",
+    secret="your_secret",
+    environment="sandbox"
+)
+
+@app.route("/")
+def index():
+    return "Bello World!"
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -12,6 +12,12 @@ const Dashboard = ({ user }) => {
   //plaid +jwt
   const [linkToken, setLinkToken] = useState(null);
   const token = localStorage.getItem("access_token");
+
+
+   // notification state
+   const [showNotification, setShowNotification] = useState(true);
+
+
   // State for account balances
   const [checking, setChecking] = useState(2500);
   const [savings, setSavings] = useState(8000);
@@ -40,9 +46,10 @@ const Dashboard = ({ user }) => {
   useEffect(() => {
     const fetchLinkToken = async () => {
       try {
-        // fetch if the user has a valid JWT
-        if (!token) return;
-
+        if (!token) {
+          console.log("No JWT token found, skipping link token fetch");
+          return;
+        }
         const response = await fetch("http://localhost:5000/api/plaid/create_link_token", {
           method: "POST",
           headers: {
@@ -50,11 +57,9 @@ const Dashboard = ({ user }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) {
-          throw new Error("Failed to fetch link token");
-        }
+        console.log("Link token fetch status:", response.status);
         const data = await response.json();
-        // The backend should return { link_token: "..." }
+        console.log("Fetched link token data:", data);
         setLinkToken(data.link_token);
       } catch (error) {
         console.error("Error fetching link token:", error);
@@ -62,6 +67,7 @@ const Dashboard = ({ user }) => {
     };
     fetchLinkToken();
   }, [token]);
+  
 
   // onSuccess callback for Plaid Link
   const onSuccess = async (public_token, metadata) => {
@@ -100,17 +106,27 @@ const Dashboard = ({ user }) => {
     onSuccess,
     onExit,
   };
-
+  
   const { open, ready } = usePlaidLink(config);
+  
 
   //  open Plaid Link
   const handleLinkBank = () => {
-    if (ready) {
+    console.log("Link to Bank button clicked");
+    console.log("linkToken:", linkToken);
+    console.log("ready:", ready);
+    if (ready && linkToken) {
+      console.log("Opening Plaid Link...");
       open();
     } else {
-      console.log("Plaid Link not ready yet");
+      console.log("Plaid Link not ready yet (or no linkToken).");
     }
   };
+  
+  
+  
+  
+  
 
   //exit button
   
@@ -171,10 +187,16 @@ const Dashboard = ({ user }) => {
       <Header onLinkBank={handleLinkBank} onLogout={handleLogout} />
       </div>
       <header>
-        <h1>Welcome, {user} 👋</h1>
+        <h1>Welcome, {user} </h1>
         <p>Stay on top of your spending!</p>
       </header>
-
+      
+      {showNotification && (
+        <div className="notification">
+          <span>Welcome to BCLS! Let's set up your budget!</span>
+          <button className="close-btn" onClick={() => setShowNotification(false)}>X</button>
+        </div>
+      )}
       {/* Account Balances - Editable */}
       <section className="account-summary">
         <div className="account-box">

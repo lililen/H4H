@@ -13,14 +13,57 @@ header {
   border-bottom: 1px solid black;
   position: flex;
 }
+header {
+  display: flex;              
+  justify-content: space-between; 
+  align-items: center;       
+  padding: 2rem 1rem;       
+  background-color: #fff;     
+}
+
+
+.notification {
+  background-color: #e0f7fa;
+  border: 1px solid #00acc1;
+  color: #007c91;
+  padding: 1rem;
+  margin: 1rem auto;
+  width: 90%;
+  border-radius: 4px;
+  position: relative;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #007c91;
+}
+
+
+
+
 
 header h1 {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-}
+  
+  }
 
+.header p{
+  display: flex;              
+  justify-content: space-between; /* space on the left & right */
+  align-items: center; 
+  margin-top: -.9rem;
+  font-size: 1.2rem;
+}
 .welcome-text{
   text-align: center;
   font-size: 18px;
@@ -30,11 +73,7 @@ header h1 {
   width: 100%;
 }
 
-header h2 {
-  display: flex;
-  flex-direction: column;
-  cursor: painter;
-}
+
 .bar {
   width: 40px;
   height: 4px;
