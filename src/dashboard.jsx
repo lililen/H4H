@@ -1,9 +1,17 @@
-import React, { useState } from "react";
-import "./dashboard.css"; // Import CSS file
+import React, { useEffect, useState } from "react";
+import "./dashboard.css"; 
+import Header from './components/header';
+import { useNavigate } from "react-router-dom";
+import { usePlaidLink } from "react-plaid-link";
+
 
 
 
 const Dashboard = ({ user }) => {
+  const navigate = useNavigate();
+  //plaid +jwt
+  const [linkToken, setLinkToken] = useState(null);
+  const token = localStorage.getItem("access_token");
   // State for account balances
   const [checking, setChecking] = useState(2500);
   const [savings, setSavings] = useState(8000);
@@ -26,6 +34,95 @@ const Dashboard = ({ user }) => {
   const [shoppingDesc, setShoppingDesc] = useState("");
   const [entertainmentDesc, setEntertainmentDesc] = useState("");
   const [foodDesc, setFoodDesc] = useState("");
+
+  ////palid fetch w flask
+
+  useEffect(() => {
+    const fetchLinkToken = async () => {
+      try {
+        // fetch if the user has a valid JWT
+        if (!token) return;
+
+        const response = await fetch("http://localhost:5000/api/plaid/create_link_token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch link token");
+        }
+        const data = await response.json();
+        // The backend should return { link_token: "..." }
+        setLinkToken(data.link_token);
+      } catch (error) {
+        console.error("Error fetching link token:", error);
+      }
+    };
+    fetchLinkToken();
+  }, [token]);
+
+  // onSuccess callback for Plaid Link
+  const onSuccess = async (public_token, metadata) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/plaid/exchange_token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ public_token }),
+      });
+      if (!response.ok) {
+        throw new Error("Token exchange failed");
+      }
+      const result = await response.json();
+      console.log("Exchange result:", result);
+      //  fetch updated account data 
+      // update checking/savings with real data from the backend
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // onExit callback if the user closes Plaid Link
+  const onExit = (error, metadata) => {
+    if (error) {
+      console.error("Plaid Link error:", error);
+    }
+   
+  };
+
+  // Config. the react-plaid-link hook
+  const config = {
+    token: linkToken,
+    onSuccess,
+    onExit,
+  };
+
+  const { open, ready } = usePlaidLink(config);
+
+  //  open Plaid Link
+  const handleLinkBank = () => {
+    if (ready) {
+      open();
+    } else {
+      console.log("Plaid Link not ready yet");
+    }
+  };
+
+  //exit button
+  
+
+  const handleLogout = () => {
+    // Remove the JWT from localStorage
+    localStorage.removeItem("access_token");
+    // Redirect to login page (assuming '/' is your login route)
+    navigate("/");
+  };
+
+
 
   // Function to determine color based on budget usage
   const getProgressColor = (spent, budget) => {
@@ -70,6 +167,9 @@ const Dashboard = ({ user }) => {
 
   return (
     <div className="dashboard-container">
+      <div>
+      <Header onLinkBank={handleLinkBank} onLogout={handleLogout} />
+      </div>
       <header>
         <h1>Welcome, {user} 👋</h1>
         <p>Stay on top of your spending!</p>
