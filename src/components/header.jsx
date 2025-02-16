@@ -1,6 +1,6 @@
 // Header.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import "./header.css";
 
 const Header = ({ onLinkBank, onLogout }) => {
@@ -12,9 +12,13 @@ const Header = ({ onLinkBank, onLogout }) => {
       <div className="header-right">
         <button onClick={onLinkBank}>Link to Bank</button>
         <button onClick={onLogout}>Exit</button>
+        <Link to="/credit" className="credit-link">
+          <button>Credit</button>
+        </Link>
       </div>
     </header>
   );
 };
 
 export default Header;
+

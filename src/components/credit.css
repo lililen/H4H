@@ -1,0 +1,66 @@
+.credit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: eneter;
+    background-color: white;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.wheel-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+}
+
+.progress-wheel {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.wheel-bg {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 8;
+  }
+
+.wheel-progress {
+    fill: none;
+    stroke: #646cff;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 282.74;
+    stroke-dashoffset: 282.74;
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.wheel-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #646cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background-color: #535bf2;
+  }

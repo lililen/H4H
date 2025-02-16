@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 const Login = ({ setUser }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (email && password) {
-      setUser(email); // Simulated user authentication
+    if (username && password) {
+      setUser(username); 
       navigate("/dashboard"); // Redirect to dashboard
     } else {
-      alert("Please enter a valid email and password.");
+      alert("Please enter a valid username and password.");
     }
   };
 
@@ -23,10 +23,10 @@ const Login = ({ setUser }) => {
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <input
