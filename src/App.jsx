@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Login";
-import Dashboard from "./Dashboard";
+import Dashboard from "./dashboard";
 
 function App() {
   const [user, setUser] = useState(null);

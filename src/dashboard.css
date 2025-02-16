@@ -1,4 +1,4 @@
-/* Dashboard Page Styling */
+/* Dashboard Styling */
 .dashboard-container {
   max-width: 800px;
   margin: auto;
@@ -16,15 +16,7 @@ header {
   padding: 20px;
   border-radius: 10px 10px 0 0;
 }
-
-.notifications {
-  background-color: #ffcc00;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 5px;
-  text-align: center;
-}
-
+/* .*/
 .account-summary {
   display: flex;
   justify-content: space-between;
@@ -41,6 +33,16 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.account-box input {
+  width: 80%;
+  padding: 5px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+}
+
 .budget-overview {
   margin-top: 20px;
 }
@@ -49,6 +51,23 @@ header {
   background-color: white;
   padding: 10px;
   margin-top: 10px;
+  border-radius: 5px;
+}
+
+.budget-item input {
+  width: 200px;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+}
+.wide-input {
+  width: 90%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
   border-radius: 5px;
 }
 
@@ -64,7 +83,3 @@ header {
   height: 100%;
   border-radius: 5px;
 }
-
-.shopping { width: 60%; background-color: #ff5733; } /* 60% of budget */
-.entertainment { width: 50%; background-color: #33aaff; } /* 50% of budget */
-.food { width: 70%; background-color: #33cc33; } /* 70% of budget */
