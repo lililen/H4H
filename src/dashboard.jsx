@@ -147,128 +147,179 @@ const Dashboard = ({ user }) => {
     if (percentage > 50) return "yellow";
     return "green";
   };
-
+  
   // Function to add spending records
-  const addShoppingSpending = () => {
-    if (shoppingInput) {
-      setShoppingSpending([...shoppingSpending, `$${shoppingInput} (${shoppingDesc})`]);
-      setShoppingInput("");
-      setShoppingDesc("");
-    }
-  };
+  const [categories, setCategories] = useState([
+    {
+      name: "Shopping",
+      budget: 500,
+      spending: [],       
+      tempAmount: "",  
+      tempDesc: " ",   
+    
+    },
+    {
+      name: "Entertainment",
+      budget: 200,
+      spending: [],       
+      tempAmount: "",
+    },
+    {
+      name: "Food-Yum!",
+      budget: 400,
+      spending: [],
+      tempAmount: "",
+      tempDesc: "",
+    },
+  ]);
 
-  const addEntertainmentSpending = () => {
-    if (entertainmentInput) {
-      setEntertainmentSpending([...entertainmentSpending, `$${entertainmentInput} (${entertainmentDesc})`]);
-      setEntertainmentInput("");
-      setEntertainmentDesc("");
-    }
-  };
-
-  const addFoodSpending = () => {
-    if (foodInput) {
-      setFoodSpending([...foodSpending, `$${foodInput} (${foodDesc})`]);
-      setFoodInput("");
-      setFoodDesc("");
-    }
-  };
-
-  // Calculate total spending for each category
-  const getTotalSpent = (spendingList) => {
-    return spendingList.reduce((total, item) => {
-      const amount = parseFloat(item.match(/\$(\d+(\.\d+)?)/)[1]); // Extracts the number after "$"
-      return total + amount;
+  function updateBudget(index, newBudget) {
+    setCategories((prevCategories) => {
+      const updated = [...prevCategories];
+      updated[index] = { ...updated[index], budget: newBudget };
+      return updated;
+    });
+  }
+  
+  function updateTempAmount(index, amount) {
+    setCategories((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], tempAmount: amount };
+      return updated;
+    });
+  }
+  
+  function updateTempDesc(index, desc) {
+    setCategories((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], tempDesc: desc };
+      return updated;
+    });
+  }
+  
+  function addSpending(index) {
+    setCategories((prevCategories) => {
+      const updated = [...prevCategories];
+      const cat = updated[index];
+      if (cat.tempAmount) {
+        const record = `$${cat.tempAmount} (${cat.tempDesc || "No description"})`;
+        cat.spending = [...cat.spending, record];
+        cat.tempAmount = "";
+        cat.tempDesc = "";
+      }
+      return updated;
+    });
+  }
+  
+  function addNewCategory() {
+    setCategories((prev) => [
+      ...prev,
+      {
+        name: "New Category",
+        budget: 100,
+        spending: [],
+        tempAmount: "",
+        tempDesc: "",
+      },
+    ]);
+  }
+  function getTotalSpent(spendingArray) {
+    return spendingArray.reduce((total, record) => {
+      const match = record.match(/\$(\d+(\.\d+)?)/);
+      return match ? total + parseFloat(match[1]) : total;
     }, 0);
-  };
-
+  }
+  
+  
   return (
     <div className="dashboard-container">
       <div>
-      <Header onLinkBank={handleLinkBank} onLogout={handleLogout} />
+        <Header onLinkBank={handleLinkBank} onLogout={handleLogout} />
       </div>
+
       <header>
-        <h1>Welcome, {user} </h1>
+        <h1>Welcome, {user}</h1>
         <p>Stay on top of your spending!</p>
       </header>
-      
+
       {showNotification && (
         <div className="notification">
           <span>Welcome to BCLS! Let's set up your budget!</span>
           <button className="close-btn" onClick={() => setShowNotification(false)}>X</button>
         </div>
       )}
-      {/* Account Balances - Editable */}
+
+      {/* Account Balances - dynamic */}
       <section className="account-summary">
         <div className="account-box">
           <h3>💰 Checking Account</h3>
-          <input type="number" value={checking} onChange={(e) => setChecking(Number(e.target.value))} />
+          <input
+            type="number"
+            value={checking}
+            onChange={(e) => setChecking(Number(e.target.value))}
+          />
         </div>
         <div className="account-box">
           <h3>🏦 Savings Account</h3>
-          <input type="number" value={savings} onChange={(e) => setSavings(Number(e.target.value))} />
+          <input
+            type="number"
+            value={savings}
+            onChange={(e) => setSavings(Number(e.target.value))}
+          />
         </div>
       </section>
 
-      {/* Budget Overview */}
-      <section className="budget-overview">
-        <h2>📊 Monthly Budget</h2>
-
-        {/* Shopping Budget */}
-        <div className="budget-item">
-          <span>Shopping</span>
-          <input type="number" value={shoppingBudget} onChange={(e) => setShoppingBudget(Number(e.target.value))} />
-          <p>Spent: ${getTotalSpent(shoppingSpending)} / ${shoppingBudget}</p>
-          <div className="progress-bar">
-            <div className="progress" style={{ width: `${(getTotalSpent(shoppingSpending) / shoppingBudget) * 100}%`, backgroundColor: getProgressColor(getTotalSpent(shoppingSpending), shoppingBudget) }}></div>
+    {/* Budget Overview */}
+    <section className="budget-overview">
+      <h2>📊 Monthly Budget</h2>
+      {categories.map((cat, index) => {
+        const totalSpent = getTotalSpent(cat.spending);
+        return (
+          <div key={index} className="budget-item">
+            <span>{cat.name}</span>
+            <input
+              type="number"
+              value={cat.budget}
+              onChange={(e) => updateBudget(index, Number(e.target.value))}
+            />
+            <p>Spent: ${totalSpent} / ${cat.budget}</p>
+            <div className="progress-bar">
+              <div
+                className="progress"
+                style={{
+                  width: `${(totalSpent / cat.budget) * 100}%`,
+                  backgroundColor: getProgressColor(totalSpent, cat.budget),
+                }}
+              ></div>
+            </div>
+            <input
+              type="number"
+              placeholder="Enter spending amount"
+              value={cat.tempAmount || ""}
+              onChange={(e) => updateTempAmount(index, e.target.value)}
+              className="wide-input"
+            />
+            <input
+              type="text"
+              placeholder="Enter description"
+              value={cat.tempDesc || ""}
+              onChange={(e) => updateTempDesc(index, e.target.value)}
+              className="wide-input"
+            />
+            <button onClick={() => addSpending(index)}>Add</button>
+            <ul>
+              {cat.spending.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
           </div>
-          <input type="number" placeholder="Enter spending amount" value={shoppingInput} onChange={(e) => setShoppingInput(e.target.value)} className="wide-input" />
-          <input type="text" placeholder="Enter description" value={shoppingDesc} onChange={(e) => setShoppingDesc(e.target.value)} className="wide-input" />
-          <button onClick={addShoppingSpending}>Add</button>
-          <ul>
-            {shoppingSpending.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Enntertainment Budget */}
-        <div className="budget-item">
-          <span>Entertainment</span>
-          <input type="number" value={entertainmentBudget} onChange={(e) => setEntertainmentBudget(Number(e.target.value))} />
-          <p>Spent: ${getTotalSpent(entertainmentSpending)} / ${entertainmentBudget}</p>
-          <div className="progress-bar">
-            <div className="progress" style={{ width: `${(getTotalSpent(entertainmentSpending) / entertainmentBudget) * 100}%`, backgroundColor: getProgressColor(getTotalSpent(entertainmentSpending), entertainmentBudget) }}></div>
-          </div>
-          <input type="number" placeholder="Enter spending amount" value={entertainmentInput} onChange={(e) => setEntertainmentInput(e.target.value)} className="wide-input" />
-          <input type="text" placeholder="Enter description" value={entertainmentDesc} onChange={(e) => setEntertainmentDesc(e.target.value)} className="wide-input" />
-          <button onClick={addEntertainmentSpending}>Add</button>
-          <ul>
-            {entertainmentSpending.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Food Budget */}
-        <div className="budget-item">
-          <span>Food</span>
-          <input type="number" value={foodBudget} onChange={(e) => setFoodBudget(Number(e.target.value))} />
-          <p>Spent: ${getTotalSpent(foodSpending)} / ${foodBudget}</p>
-          <div className="progress-bar">
-            <div className="progress" style={{ width: `${(getTotalSpent(foodSpending) / foodBudget) * 100}%`, backgroundColor: getProgressColor(getTotalSpent(foodSpending), foodBudget) }}></div>
-          </div>
-          <input type="number" placeholder="Enter spending amount" value={foodInput} onChange={(e) => setFoodInput(e.target.value)} className="wide-input" />
-          <input type="text" placeholder="Enter description" value={foodDesc} onChange={(e) => setFoodDesc(e.target.value)} className="wide-input" />
-          <button onClick={addFoodSpending}>Add</button>
-          <ul>
-            {foodSpending.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
+        );
+      })}
+      <button onClick={addNewCategory} className="add-category-btn">
+        + Add Category
+      </button>
+    </section>
     </div>
   );
 };
-//
 export default Dashboard;
