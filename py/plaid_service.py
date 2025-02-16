@@ -30,7 +30,7 @@ def creat_link_token():
         return jsonify({'error': str(e)}), 400
 @app.route('/api/plaid/exchange_token', methods=['POST'])
 @jwt_required()
-#
+
 def exchange_token():
         data = request.json
         public_token = data.get('public_token')
