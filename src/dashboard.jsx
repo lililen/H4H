@@ -107,7 +107,7 @@ const Dashboard = ({ user }) => {
           </ul>
         </div>
 
-        {/* Entertainment Budget */}
+        {/* Enntertainment Budget */}
         <div className="budget-item">
           <span>Entertainment</span>
           <input type="number" value={entertainmentBudget} onChange={(e) => setEntertainmentBudget(Number(e.target.value))} />
