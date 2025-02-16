@@ -30,7 +30,7 @@ def init(username, password, ln, fn, birthday, budget):
 
     if username in data:
         return jsonify({"Error": "Username already exists"}), 400
-#
+
     data[username] = {
         "password": password,
         "last_name": ln,
