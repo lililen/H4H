@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./dashboard.css"; // Import CSS file
 
+
+
 const Dashboard = ({ user }) => {
   // State for account balances
   const [checking, setChecking] = useState(2500);

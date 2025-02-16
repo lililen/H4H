@@ -1,18 +1,16 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./login";
+import React from "react";
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Login from "./Login";
 import Dashboard from "./dashboard";
 
-const App = () => {
-  const [user, setUser] = useState(null);
-
-  return (
-    <Router>
+function App(){
+  return(
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login setUser={setUser} />} />
-        <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/" />} />
-      </Routes>
-    </Router>
+          <Route path="/" element={<Login/>}/>
+          <Route path="dashboard" element={<Dashboard/>}/>
+        </Routes>
+      </BrowserRouter>
   );
 };
 
