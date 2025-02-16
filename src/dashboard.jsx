@@ -1,22 +1,14 @@
 import React from "react";
-import "./dashboard.css"; // Import the CSS file
+import "./dashboard.css"; // Import CSS file
 
-const Dashboard = () => {
+const Dashboard = ({ user }) => {
   return (
     <div className="dashboard-container">
-      {/* Header Section */}
       <header>
-        <h1>Welcome, You little bitch</h1>
+        <h1>Welcome, {user} 👋</h1>
         <p>Stay on top of your spending!</p>
       </header>
 
-      {/* Notifications Section */}
-      <section className="notifications">
-        <h2>🔔 Notifications</h2>
-        <p>You spent $50 on Entertainment today. What a dumbass</p>
-      </section>
-
-      {/* Account Summary */}
       <section className="account-summary">
         <div className="account-box">
           <h3>💰 Checking Account</h3>
@@ -28,7 +20,6 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* Budget Overview */}
       <section className="budget-overview">
         <h2>📊 Monthly Budget</h2>
         <div className="budget-item">
