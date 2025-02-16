@@ -10,8 +10,8 @@ const Login = ({ setUser }) => {
   const handleLogin = (e) => {
     e.preventDefault();
     if (username && password) {
-      setUser(username); // Store username in state
-      navigate("/dashboard"); // Redirect to Dashboard
+      setUser(username); //store username in state
+      navigate("/dashboard"); // redirect to Dashboard
     } else {
       alert("Please enter a valid username and password.");
     }
